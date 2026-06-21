@@ -1,0 +1,22 @@
+# Laufzeit-/Nutzerdaten
+data/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Build-Artefakte
+build/
+dist/
+*.spec.bak
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

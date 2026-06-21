@@ -1,0 +1,41 @@
+<h2>Hilfe</h2>
+
+<h3>Erste Schritte</h3>
+<ol>
+  <li>Unter <b>Einstellungen</b> die FDDB-Zugangsdaten hinterlegen:
+    entweder Benutzername + Passwort, oder ein <b>fddb-Cookie</b>.</li>
+  <li>Im Tab <b>Sync</b> einen Zeitraum wählen und den Import starten.</li>
+  <li>Danach stehen Tag, Datumsbereich, Listen und Verdichtungen zur Verfügung.</li>
+</ol>
+
+<h3>fddb-Cookie ermitteln</h3>
+<p>Im Browser bei fddb.info einloggen, Entwicklertools öffnen
+  (F12), zum Bereich <i>Anwendung &rarr; Cookies</i> wechseln, den Wert des
+  Cookies <code>fddb</code> kopieren und in die Einstellungen einfügen. Diese
+  Variante ist unabhängig von Änderungen der Login-Seite und daher robuster.</p>
+
+<h3>Datenhaltung</h3>
+<p>Alle Daten liegen lokal im Ordner <code>data</code> neben dem Programm:</p>
+<ul>
+  <li><code>data/days.json</code> – konsolidierte Tagesdaten</li>
+  <li><code>data/products.json</code> – abgeleiteter Produktkatalog</li>
+  <li><code>data/imports/&lt;zeitstempel&gt;/</code> – einzelne Import-Snapshots</li>
+  <li><code>data/settings.json</code> – Profil und Zugangsdaten</li>
+  <li><code>data/notes.json</code> – Tagesnotizen</li>
+</ul>
+
+<h3>Importverhalten</h3>
+<p>Jeder Sync wird als Snapshot gespeichert und anschließend in die
+  Arbeitsdatei eingepflegt. Bei sich überschneidenden Tagen gilt:
+  vollständige Tage schlagen unvollständige; bei gleicher Qualität gewinnt
+  der spätere Import.</p>
+
+<h3>Export</h3>
+<p>In den Tabs <b>Tag</b> und <b>Datumsbereich</b> lassen sich die Daten als
+  Excel (ein Tabellenblatt pro Tag) oder als PDF exportieren. Name und
+  Geburtsdatum aus dem Profil erscheinen in den Exporten.</p>
+
+<h3>Hinweis zur Datenquelle</h3>
+<p>FDDB.info bietet keine offene API. Das Tool liest das Ernährungstagebuch
+  über die normale Website aus (wie ein Browser). Ändert FDDB das
+  Seitenlayout, kann eine Anpassung der Auslesung nötig werden.</p>

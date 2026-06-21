@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FDDB Overview</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>FDDB Overview</h1>
+    <span class="sub">Lokale Auswertung deiner FDDB.info-Ernährungsdaten</span>
+    <span class="flexspace"></span>
+    <span id="ovInfo" class="sub"></span>
+  </header>
+
+  <nav>
+    <button data-tab="overview" class="active">Übersicht</button>
+    <button data-tab="sync">Sync</button>
+    <button data-tab="day">Tag</button>
+    <button data-tab="range">Datumsbereich</button>
+    <button data-tab="lists">Listen</button>
+    <button data-tab="agg">Verdichtungen</button>
+    <button data-tab="settings">Einstellungen</button>
+    <button data-tab="help">Hilfe</button>
+  </nav>
+
+  <main>
+    <!-- ÜBERSICHT -->
+    <section id="tab-overview" class="tab active">
+      <div id="emptyHint" class="hint" style="display:none">
+        Noch keine Daten vorhanden. Wechsle zu <b>Einstellungen</b>, hinterlege
+        deine FDDB-Zugangsdaten oder ein Cookie, und starte dann im Tab
+        <b>Sync</b> den ersten Import.
+      </div>
+      <div class="card">
+        <h2>Übersicht</h2>
+        <div id="ovStats" class="stat-grid"></div>
+      </div>
+    </section>
+
+    <!-- SYNC -->
+    <section id="tab-sync" class="tab">
+      <div class="card">
+        <h2>FDDB-Sync</h2>
+        <p class="muted">Lädt das Ernährungstagebuch direkt von fddb.info. Zugangsdaten
+          stammen aus den Einstellungen, können hier aber überschrieben werden.</p>
+        <div class="row">
+          <div><label>Von</label><input type="date" id="syncFrom"></div>
+          <div><label>Bis</label><input type="date" id="syncTo"></div>
+          <div><label>&nbsp;</label><button class="btn" id="syncStart">Sync starten</button></div>
+        </div>
+        <div class="progress-bar"><div id="syncProgress"></div></div>
+        <div id="syncMsg" class="muted"></div>
+      </div>
+
+      <div class="card">
+        <h3>Manueller JSON-Import</h3>
+        <p class="muted">Überschreibt die konsolidierten Arbeitsdaten mit einer
+          hochgeladenen <code>days.json</code> (für Backups/Reparaturen).</p>
+        <input type="file" id="importFile" accept="application/json">
+        <button class="btn secondary" id="importBtn">Importieren</button>
+        <span id="importMsg" class="muted"></span>
+      </div>
+    </section>
+
+    <!-- TAG -->
+    <section id="tab-day" class="tab">
+      <div class="card">
+        <h2>Einzelner Tag</h2>
+        <div class="row">
+          <div><label>Datum</label><input type="date" id="dayDate"></div>
+          <div><label>&nbsp;</label><button class="btn" id="dayLoad">Anzeigen</button></div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="dayExcel">Excel</button></div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="dayPdf">PDF</button></div>
+        </div>
+      </div>
+      <div id="dayResult"></div>
+    </section>
+
+    <!-- DATUMSBEREICH -->
+    <section id="tab-range" class="tab">
+      <div class="card">
+        <h2>Datumsbereich</h2>
+        <div class="row">
+          <div><label>Von</label><input type="date" id="rangeFrom"></div>
+          <div><label>Bis</label><input type="date" id="rangeTo"></div>
+          <div><label>&nbsp;</label><button class="btn" id="rangeLoad">Anzeigen</button></div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="rangeExcel">Excel</button></div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="rangePdf">PDF</button></div>
+        </div>
+      </div>
+      <div id="rangeResult"></div>
+    </section>
+
+    <!-- LISTEN -->
+    <section id="tab-lists" class="tab">
+      <div class="card">
+        <h2>Listen</h2>
+        <div class="row">
+          <div><label>Produktsuche</label><input type="text" id="searchQ" placeholder="Name eingeben ..."></div>
+          <div><label>&nbsp;</label><button class="btn" id="searchBtn">Suchen</button></div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="topBtn">Top 100</button></div>
+          <div>
+            <label>Tagesranking</label>
+            <select id="rankMetric">
+              <option value="kcal">kcal</option>
+              <option value="fat">Fett</option>
+              <option value="carbs">Kohlenhydrate</option>
+              <option value="protein">Eiweiß</option>
+            </select>
+          </div>
+          <div><label>&nbsp;</label><button class="btn secondary" id="rankBtn">Ranking</button></div>
+        </div>
+        <div id="weekdayFilter" class="muted" style="margin-top:8px"></div>
+      </div>
+      <div id="listResult"></div>
+    </section>
+
+    <!-- VERDICHTUNGEN -->
+    <section id="tab-agg" class="tab">
+      <div class="card">
+        <h2>Verdichtungen</h2>
+        <div class="row">
+          <button class="btn" data-agg="meal">Nach Mahlzeit</button>
+          <button class="btn" data-agg="weekday">Nach Wochentag</button>
+          <button class="btn" data-agg="month">Nach Monat</button>
+        </div>
+      </div>
+      <div id="aggResult"></div>
+    </section>
+
+    <!-- EINSTELLUNGEN -->
+    <section id="tab-settings" class="tab">
+      <div class="card">
+        <h2>Profil</h2>
+        <label>Name</label><input type="text" id="setName">
+        <label>Geburtsdatum</label><input type="date" id="setBirth">
+      </div>
+      <div class="card">
+        <h2>FDDB-Zugang</h2>
+        <p class="muted">Variante A: Benutzername + Passwort (Login automatisch).
+          Variante B: <span class="tip" title="In FDDB einloggen, Entwicklertools öffnen, unter Anwendung/Cookies den Wert des Cookies 'fddb' kopieren.">fddb-Cookie</span>
+          manuell einfügen (robuster). Beides wird lokal in <code>data/settings.json</code> gespeichert.</p>
+        <label>Benutzername / E-Mail</label><input type="text" id="setUser">
+        <label>Passwort <span id="pwState" class="muted"></span></label><input type="password" id="setPass" placeholder="(leer lassen = unverändert)">
+        <label>fddb-Cookie <span id="ckState" class="muted"></span></label><input type="text" id="setCookie" placeholder="Wert des Cookies 'fddb'">
+        <div style="margin-top:12px">
+          <button class="btn" id="setSave">Speichern</button>
+          <span id="setMsg" class="muted"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- HILFE -->
+    <section id="tab-help" class="tab">
+      <div class="card" id="helpContent">Lädt ...</div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
