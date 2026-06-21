@@ -1,0 +1,44 @@
+name: Windows Portable EXE
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Release-Version, z.B. v1.0.0 (leer = nur Artifact)"
+        required: false
+        default: ""
+      release_notes:
+        description: "Optionaler Infotext zum Release"
+        required: false
+        default: ""
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build portable EXE
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File .\scripts\build-portable-windows.ps1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FDDB-Overview-Windows-Portable
+          path: "dist/FDDB Overview"
+
+      - name: Create release
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_version != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_version }}
+          name: FDDB Overview ${{ inputs.release_version }}
+          body: ${{ inputs.release_notes != '' && inputs.release_notes || 'Portable Windows-Version von FDDB Overview.' }}
+          files: dist/FDDB-Overview-Windows-Portable.zip
